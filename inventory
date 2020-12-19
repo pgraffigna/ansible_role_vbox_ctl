@@ -1,0 +1,5 @@
+[lubuntu]
+192.168.0.2
+
+[lubuntu:vars]
+ansible_user=quentin

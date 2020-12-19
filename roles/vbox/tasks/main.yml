@@ -1,0 +1,27 @@
+---
+- name: Actualiza la cache de los repos
+  apt: 
+    update_cache: yes
+    
+- name: Instalar virtualbox
+  apt:
+    name: virtualbox
+    state: present
+    
+- name: Descargar virtualbox extensión pack
+  get_url:
+    url: "https://download.virtualbox.org/virtualbox/{{ version }}/Oracle_VM_VirtualBox_Extension_Pack-{{ version }}.vbox-extpack"
+    dest: /tmp/
+    force: yes    
+
+- name: Instalación VirtualBox extension pack
+  shell: "echo 'y' | VBoxManage extpack install /tmp/Oracle_VM_VirtualBox_Extension_Pack-{{ version }}.vbox-extpack"
+
+- name: Asegurarse que los módulos de vbox se cargaron
+  modprobe:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - vboxnetadp
+    - vboxnetflt
+    - vboxdrv
